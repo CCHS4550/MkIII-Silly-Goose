@@ -29,7 +29,7 @@ public class Robot extends TimedRobot {
   CCTalon right2 = new CCTalon(3, true);
   MotorControllerGroup rightSide = new MotorControllerGroup(right1, right2);
 
-  Solenoid shoot = new Solenoid(PneumaticsModuleType.CTREPCM, 0);
+  //Solenoid shoot = new Solenoid(PneumaticsModuleType.CTREPCM, 0);
 
   @Override
   public void robotInit() {
@@ -59,7 +59,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    normalController();
+    joycon();
   }
 
   @Override
@@ -131,7 +131,7 @@ public class Robot extends TimedRobot {
     if(fwd - velocity != 0 && decelTime != 0) velocity += (fwd - velocity) / Math.abs(fwd - velocity) * deltaTime / decelTime;
     double turn = -OI.axis(0, WiimoteMap.DPAD_HORIZONTAL);
     drive(-velocity, turn * .3); 
-    shoot.set(OI.button(0, WiimoteMap.A) && OI.button(0, WiimoteMap.B));
+    //shoot.set(OI.button(0, WiimoteMap.A) && OI.button(0, WiimoteMap.B));
   }
 
   
@@ -152,12 +152,20 @@ public class Robot extends TimedRobot {
     double y = OI.button(0, DDRMap.UP) ? 1 : OI.button(0, DDRMap.DOWN) ? -1 : 0;
     double turn = OI.button(0, DDRMap.LEFT) ? 1 : OI.button(0, DDRMap.RIGHT) ? -1 : 0;
     drive(y, turn);
-    shoot.set(OI.button(0, DDRMap.A) && OI.button(0, DDRMap.B));
+    //shoot.set(OI.button(0, DDRMap.A) && OI.button(0, DDRMap.B));
   }
 
   void normalController(){
     drive(OI.axis(0, ControlMap.L_JOYSTICK_VERTICAL), OI.axis(0, ControlMap.R_JOYSTICK_HORIZONTAL));
-    shoot.set((OI.axis(0, ControlMap.RT) + OI.axis(0, ControlMap.LT)) / 2 >= 0.9);
+    //shoot.set((OI.axis(0, ControlMap.RT) + OI.axis(0, ControlMap.LT)) / 2 >= 0.9);
+  }
+
+  void joycon(){
+    double turn = OI.button(0, ControlMap.LB_BUTTON) ? -1 : (OI.button(0, ControlMap.RB_BUTTON) ? 1 : 0);
+    double fwd = OI.axis(0, ControlMap.L_JOYSTICK_VERTICAL);
+    turn *= 0.65;
+    fwd *= 1;
+    drive(fwd, turn);
   }
 
   void drive(double fwd, double turn){
