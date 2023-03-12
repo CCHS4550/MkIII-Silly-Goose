@@ -1,9 +1,0 @@
-{
-  "NTProvider": {
-    "types": {
-      "/FMSInfo": "FMSInfo",
-      "/LiveWindow/Ungrouped/MecanumDrive[1]": "MecanumDrive",
-      "/LiveWindow/Ungrouped/Talon SRX [3]": "Motor Controller"
-    }
-  }
-}
