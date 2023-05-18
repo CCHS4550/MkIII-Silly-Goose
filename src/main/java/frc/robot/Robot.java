@@ -24,19 +24,18 @@ public class Robot extends TimedRobot {
 
   //private DifferentialDrive driveTrain;
 
-  CCSparkMax left1 = new CCSparkMax("front left", "fl", 1, MotorType.kBrushed, IdleMode.kCoast, false);
-  CCSparkMax left2 = new CCSparkMax("back left", "bl", 4, MotorType.kBrushed, IdleMode.kCoast, false);
-  //MotorControllerGroup leftSide = new MotorControllerGroup(left1, left2);
+  CCSparkMax left1 = new CCSparkMax("front left", "fl", 4, MotorType.kBrushed, IdleMode.kCoast, false, -1);
+  CCSparkMax left2 = new CCSparkMax("back left", "bl", 2, MotorType.kBrushed, IdleMode.kCoast, false, -1);
+  MotorControllerGroup leftSide = new MotorControllerGroup(left1, left2);
 
-  CCSparkMax right1 = new CCSparkMax("front right", "fr", 2, MotorType.kBrushed, IdleMode.kCoast, false);
-  CCSparkMax right2 = new CCSparkMax("back right", "br", 3, MotorType.kBrushed, IdleMode.kCoast, false);
-  //MotorControllerGroup rightSide = new MotorControllerGroup(right1, right2);
+  CCSparkMax right1 = new CCSparkMax("front right", "fr", 3, MotorType.kBrushed, IdleMode.kCoast, true, -1);
+  CCSparkMax right2 = new CCSparkMax("back right", "br", 1, MotorType.kBrushed, IdleMode.kCoast, true, -1);
+  MotorControllerGroup rightSide = new MotorControllerGroup(right1, right2);
 
-  CCSparkMax spindex = new CCSparkMax("spindexer", "s", 5, MotorType.kBrushless, IdleMode.kCoast, false);
+  CCSparkMax spindex = new CCSparkMax("spindexer", "s", 5, MotorType.kBrushless, IdleMode.kCoast, false, -1);
 
 
-  MecanumDrive driveTrain = new MecanumDrive(left2, left1, right2, right1);
-
+  DifferentialDrive driveTrain = new DifferentialDrive(leftSide, rightSide);
   Solenoid shoot = new Solenoid(PneumaticsModuleType.CTREPCM, 0);
 
   @Override
@@ -72,7 +71,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void testPeriodic(){
-
+    left2.set(OI.axis(0, ControlMap.L_JOYSTICK_VERTICAL));
   }
 
   // Trigger mic = new Trigger();
@@ -166,7 +165,7 @@ public class Robot extends TimedRobot {
   void normalController(){
     drive(OI.axis(0, ControlMap.L_JOYSTICK_VERTICAL), OI.axis(0, ControlMap.L_JOYSTICK_HORIZONTAL), OI.axis(0, ControlMap.R_JOYSTICK_HORIZONTAL));
     shoot.set((OI.axis(0, ControlMap.RT) + OI.axis(0, ControlMap.LT)) / 2 >= 0.9);
-    spindex.set(OI.dPadAng(0) > 0 ? Math.cos(Math.toRadians((OI.dPadAng(0) + 270) % 360)) : 0);
+    spindex.set(OI.dPadAng(0) > 0 ? Math.cos(Math.toRadians((OI.dPadAng(0) + 270) % 360)) * 0.2 : 0);
   }
 
   // void joycon(){
@@ -177,8 +176,9 @@ public class Robot extends TimedRobot {
   //   drive(fwd, turn);
   // }
 
+
   void drive(double fwd, double strafe, double turn){
-    driveTrain.driveCartesian(-fwd, strafe, turn);
+    driveTrain.arcadeDrive(fwd, turn);
   }
 
 }
