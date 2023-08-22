@@ -33,7 +33,8 @@ public class Robot extends TimedRobot {
   MotorControllerGroup rightSide = new MotorControllerGroup(right1, right2);
 
   CCSparkMax spindex = new CCSparkMax("spindexer", "s", 5, MotorType.kBrushless, IdleMode.kCoast, false, -1);
-
+  CCSparkMax pitch = new CCSparkMax("pitch", "p", 6, MotorType.kBrushless, IdleMode.kBrake, false, -1);
+  CCSparkMax actuator = new CCSparkMax("linearactuator", "up", 7, MotorType.kBrushed, IdleMode.kBrake, false, -1);
 
   DifferentialDrive driveTrain = new DifferentialDrive(leftSide, rightSide);
   Solenoid shoot = new Solenoid(PneumaticsModuleType.CTREPCM, 0);
@@ -163,9 +164,17 @@ public class Robot extends TimedRobot {
   // }
 
   void normalController(){
-    drive(OI.axis(0, ControlMap.L_JOYSTICK_VERTICAL), OI.axis(0, ControlMap.L_JOYSTICK_HORIZONTAL), OI.axis(0, ControlMap.R_JOYSTICK_HORIZONTAL));
+    drive(
+    OI.axis(0, ControlMap.L_JOYSTICK_VERTICAL),
+     OI.axis(0, ControlMap.L_JOYSTICK_HORIZONTAL),
+      OI.axis(0, ControlMap.R_JOYSTICK_HORIZONTAL));
+
     shoot.set((OI.axis(0, ControlMap.RT) + OI.axis(0, ControlMap.LT)) / 2 >= 0.9);
-    spindex.set(OI.dPadAng(0) > 0 ? Math.cos(Math.toRadians((OI.dPadAng(0) + 270) % 360)) * 0.2 : 0);
+
+    spindex.set(OI.dPadAng(0) > 0 ? Math.cos(Math.toRadians((OI.dPadAng(0) + 270) % 360)) * 0.5 : 0);
+    pitch.set(OI.buttonDown(0, ControlMap.A_BUTTON) == true ? -0.1 : 0);
+    pitch.set(OI.buttonDown(0, ControlMap.Y_BUTTON) == true ? 0.1 : 0);
+    actuator.set(OI.dPad(0) > 0 ? Math.sin(Math.toRadians((OI.dPadAng(0) + 90) % 360)) * 0.5 : 0);
   }
 
   // void joycon(){
