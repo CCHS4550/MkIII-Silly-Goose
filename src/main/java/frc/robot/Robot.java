@@ -34,7 +34,7 @@ public class Robot extends TimedRobot {
 
   CCSparkMax spindex = new CCSparkMax("spindexer", "s", 5, MotorType.kBrushless, IdleMode.kCoast, false, -1);
   CCSparkMax pitch = new CCSparkMax("pitch", "p", 6, MotorType.kBrushless, IdleMode.kBrake, false, -1);
-  CCSparkMax actuator = new CCSparkMax("linearactuator", "up", 7, MotorType.kBrushed, IdleMode.kBrake, false, -1);
+  CCSparkMax actuator = new CCSparkMax("linearactuator", "up", 7, MotorType.kBrushed, IdleMode.kBrake, true, -1);
 
   DifferentialDrive driveTrain = new DifferentialDrive(leftSide, rightSide);
   Solenoid shoot = new Solenoid(PneumaticsModuleType.CTREPCM, 0);
@@ -171,10 +171,33 @@ public class Robot extends TimedRobot {
 
     shoot.set((OI.axis(0, ControlMap.RT) + OI.axis(0, ControlMap.LT)) / 2 >= 0.9);
 
-    spindex.set(OI.dPadAng(0) > 0 ? Math.cos(Math.toRadians((OI.dPadAng(0) + 270) % 360)) * 0.5 : 0);
-    pitch.set(OI.buttonDown(0, ControlMap.A_BUTTON) == true ? -0.1 : 0);
-    pitch.set(OI.buttonDown(0, ControlMap.Y_BUTTON) == true ? 0.1 : 0);
-    actuator.set(OI.dPad(0) > 0 ? Math.sin(Math.toRadians((OI.dPadAng(0) + 90) % 360)) * 0.5 : 0);
+  
+  spindex.set(OI.dPadAng(0) > 0 ? Math.cos(Math.toRadians((OI.dPadAng(0) + 270) % 360)) * 0.2 : 0);
+   
+ // if (OI.buttonDown(0, ControlMap.A_BUTTON) == true) {
+   // pitch.set(-1);
+//   } else if(OI.buttonDown(0, ControlMap.Y_BUTTON) == true) {
+//    pitch.set(1);
+//   } else {   
+//    pitch.set(0);
+//   }
+
+if (OI.button(0, ControlMap.A_BUTTON) == true) {
+    pitch.set(OI.button(0, ControlMap.A_BUTTON) ? -0.1 : 0);
+} else if (OI.button(0, ControlMap.Y_BUTTON) == true) {
+    pitch.set(OI.button(0, ControlMap.Y_BUTTON) ? 0.05 : 0);
+} else {
+  pitch.set(0);
+}
+    //actuator.set(OI.dPadAng(0) > -1 ? Math.sin(Math.toRadians((OI.dPadAng(0) + 90) % 360)) * 0.3 : 0);
+
+    if(OI.dPad(0, ControlMap.DPAD_UP) == true) {
+      actuator.set(0.5);
+    } else if(OI.dPad(0,ControlMap.DPAD_DOWN) == true) {
+      actuator.set(-0.4);
+    } else {
+      actuator.set(0);
+    }
   }
 
   // void joycon(){
