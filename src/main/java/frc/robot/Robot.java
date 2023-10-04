@@ -182,11 +182,11 @@ public class Robot extends TimedRobot {
 //   }
 
   if (OI.button(0, ControlMap.A_BUTTON) == true) {
-      pitch.set(OI.button(0, ControlMap.A_BUTTON) ? -0.01 : 0);
+      pitch.set(OI.button(0, ControlMap.A_BUTTON) ? -0.03 : 0);
   } else if (OI.button(0, ControlMap.Y_BUTTON) == true) {
       pitch.set(OI.button(0, ControlMap.Y_BUTTON) ? 0.1 : 0);
   } else {
-    pitch.set(0);
+    pitch.set(0.02);
   }
     //actuator.set(OI.dPadAng(0) > -1 ? Math.sin(Math.toRadians((OI.dPadAng(0) + 90) % 360)) * 0.3 : 0);
 
