@@ -166,7 +166,6 @@ public class Robot extends TimedRobot {
   void normalController(){
     drive(
     OI.axis(0, ControlMap.L_JOYSTICK_VERTICAL),
-     OI.axis(0, ControlMap.L_JOYSTICK_HORIZONTAL),
       OI.axis(0, ControlMap.R_JOYSTICK_HORIZONTAL));
 
     shoot.set((OI.axis(0, ControlMap.RT) + OI.axis(0, ControlMap.LT)) / 2 >= 0.9);
@@ -182,13 +181,13 @@ public class Robot extends TimedRobot {
 //    pitch.set(0);
 //   }
 
-if (OI.button(0, ControlMap.A_BUTTON) == true) {
-    pitch.set(OI.button(0, ControlMap.A_BUTTON) ? -0.08 : 0);
-} else if (OI.button(0, ControlMap.Y_BUTTON) == true) {
-    pitch.set(OI.button(0, ControlMap.Y_BUTTON) ? 0.1 : 0);
-} else {
-  pitch.set(-0.02);
-}
+  if (OI.button(0, ControlMap.A_BUTTON) == true) {
+      pitch.set(OI.button(0, ControlMap.A_BUTTON) ? -0.03 : 0);
+  } else if (OI.button(0, ControlMap.Y_BUTTON) == true) {
+      pitch.set(OI.button(0, ControlMap.Y_BUTTON) ? 0.1 : 0);
+  } else {
+    pitch.set(0.02);
+  }
     //actuator.set(OI.dPadAng(0) > -1 ? Math.sin(Math.toRadians((OI.dPadAng(0) + 90) % 360)) * 0.3 : 0);
 
     if(OI.dPad(0, ControlMap.DPAD_UP) == true) {
@@ -209,8 +208,8 @@ if (OI.button(0, ControlMap.A_BUTTON) == true) {
   // }
 
 
-  void drive(double fwd, double strafe, double turn){
-    driveTrain.arcadeDrive(fwd, turn);
+  void drive(double fwd, double turn){
+    driveTrain.arcadeDrive(OI.normalize(fwd, -1, 1), OI.normalize(turn, -.5, .5));
   }
 
 }
